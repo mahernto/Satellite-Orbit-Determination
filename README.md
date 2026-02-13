@@ -1,0 +1,101 @@
+
+# Initial Orbit Determination: Extended Kalman Filter (GEOS-3)
+
+![C++](https://img.shields.io/badge/C++-17-blue.svg)
+![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
+![License](https://img.shields.io/badge/license-MIT-green)
+
+## 🛰️ Project Overview
+This project implements a high-performance **Extended Kalman Filter (EKF)** for satellite orbit determination, specifically targeted at the **GEOS-3** satellite[cite: 93, 206].
+
+The primary objective was to migrate a legacy **MATLAB** codebase (2,800+ lines) to **Modern C++**, focusing on:
+* **Memory Safety & Efficiency**: Replacing high-level abstractions with optimized memory management.
+* **Performance Optimization**: Reducing execution latency through binary serialization and compiler optimizations.
+* **Numerical Precision**: Ensuring sub-decimal accuracy compared to the original mathematical model[cite: 100, 101].
+
+## ⚡ Key Performance Metrics
+By migrating from MATLAB to C++ and applying static optimization techniques (`-O3`), the system achieved an **~80% reduction in execution time**[cite: 382, 414].
+
+| Metric | Legacy MATLAB | Optimized C++ (`-O3`) | Improvement |
+| :--- | :--- | :--- | :--- |
+| **Execution Time** | 5.56 s [cite: 347] | 1.06 s [cite: 410] | **~5.2x Faster** |
+| **I/O Strategy** | Text Parsing (`.txt`) | Binary Reading (`.bin`) | Reduced Latency |
+| **Memory Usage** | Dynamic (High Overhead) | Optimized (Custom Matrix Class) | Efficient Allocation |
+
+> **Note:** File loading time was reduced by approx. 3-4 seconds by converting large coefficient files (`DE430Coeff`) from text to binary format[cite: 351, 382].
+
+## 🛠️ Technical Features
+
+### 1. Custom Linear Algebra Engine (`Matrix` Class)
+Instead of relying on heavy external libraries, a custom `Matrix` class was engineered to handle vector/matrix operations[cite: 231].
+* **Operator Overloading**: Implemented `+`, `-`, `*`, `/` for scalars and matrices to mimic mathematical syntax[cite: 233, 238].
+* **Memory Management**: Handled dynamic memory allocation/deallocation to prevent leaks[cite: 141, 142].
+* **Vector Operations**: Support for dot products, norms, and transpositions[cite: 240, 241].
+
+### 2. Physics & Math Implementation
+The system implements complex astrodynamics algorithms, including:
+* **Legendre Polynomials** for gravitational potential[cite: 130].
+* **Runge-Kutta Integration (DEInteg)** for orbital propagation[cite: 205].
+* **Chebyshev Polynomials** for ephemeris interpolation[cite: 183].
+* **Coordinate Transformations**: ECI (Earth-Centered Inertial) to ECEF (Earth-Centered, Earth-Fixed)[cite: 202].
+
+### 3. Engineering Practices
+* **Test-Driven Development (TDD)**: Unit tests were created for every module (e.g., `Mjday`, `AccelPointMass`) to validate C++ output against MATLAB baselines[cite: 159, 160].
+* **Profiling & Analysis**: Used **gprof** for performance profiling and **Understand** for static code analysis and complexity metrics[cite: 416, 497].
+
+## 📂 Project Structure
+The project follows a standard C++ engineering structure[cite: 134]:
+
+```text
+├── src/            # Source files (.cpp) - Main logic and algorithms
+├── include/        # Header files (.h) - Declarations and global constants
+├── data/           # Input data (Earth orientation parameters, coefficients)
+├── tests/          # Unit tests for individual math functions
+└── docs/           # Documentation generated via Doxygen [cite: 717]
+
+```
+
+## 🚀 How to Build & Run
+
+### Prerequisites
+
+* C++ Compiler (GCC/G++ recommended)
+* CMake (Optional, but recommended)
+
+### Compilation (Manual)
+
+You can compile the project using `g++` with optimization flags as demonstrated in the performance analysis:
+
+```bash
+# Compile with O3 optimization
+g++ -O3 EKF_GEOS3.cpp ./src/*.cpp -o iod_ekf
+
+# Run the executable
+./iod_ekf
+
+```
+
+### Compilation (CMake)
+
+```bash
+mkdir build && cd build
+cmake ..
+make
+./iod_ekf
+
+```
+
+## 📊 Documentation
+
+Full documentation of functions and dependencies was generated using **Doxygen** and **GraphViz**. You can find the dependency graphs and call trees in the `docs/` folder.
+
+## 👤 Author
+
+**Martín Hernández Tonzán**
+
+* [LinkedIn](https://www.google.com/search?q=https://www.linkedin.com/in/martin-hernandez-tonzan)
+* [GitHub](https://www.google.com/search?q=https://github.com/mahernto)
+
+---
+
+Project originally developed for "Taller Transversal I" course at Universidad de La Rioja.

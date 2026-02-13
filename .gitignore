@@ -1,0 +1,54 @@
+/c++/cmake-build-debug/
+/c++/.idea/
+
+# --- C++ Compiled Objects & Libraries ---
+*.o
+*.obj
+*.so
+*.dll
+*.lib
+*.a
+
+# --- Executables ---
+*.exe
+*.out
+*.app
+iod_ekf
+iod_ekf_test
+
+# --- Build / CMake Folders ---
+build/
+cmake-build-debug/
+cmake-build-release/
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+*.ninja
+
+.idea/
+
+# --- Visual Studio Code ---
+.vscode/
+.vs/
+*.user
+*.suo
+*.pdb
+*.ilk
+
+# --- Project Specific Generated Files ---
+*.bin
+DE430Coeff.bin
+
+# --- Profiling (Gprof) ---
+gmon.out
+analysis.txt
+
+# --- Documentation (Doxygen) ---
+docs/html/
+docs/latex/
+*.rtf
+
+# --- OS Specific ---
+.DS_Store
+Thumbs.db
